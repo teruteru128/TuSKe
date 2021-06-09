@@ -4,21 +4,17 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import com.github.tukenuke.tuske.TuSKe;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import com.github.tukenuke.tuske.documentation.Dependency;
-import com.github.tukenuke.tuske.util.ReflectionUtils;
 import com.github.tukenuke.tuske.util.Registry;
+import com.viaversion.viaversion.ViaVersionPlugin;
+import com.viaversion.viaversion.api.ViaAPI;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
 import javax.annotation.Nullable;
-
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import org.bukkit.plugin.java.JavaPlugin;
-import us.myles.ViaVersion.ViaVersionPlugin;
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
-import us.myles.ViaVersion.bukkit.platform.BukkitViaAPI;
-
-import java.util.logging.Level;
 
 @Name("Minecraft Version")
 @Description("Returns the minecraft version of {{types|Player|player}}.")
@@ -31,16 +27,13 @@ import java.util.logging.Level;
 public class ExprPlayerVersion extends SimplePropertyExpression<Player, String>{
 	private static boolean hasViaVersion = false;
 	private static boolean hasProtocolSupport = Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolSupport");
-	private static Object api; //ViaVersion API instance
+	private static ViaAPI<Player> api; //ViaVersion API instance
 
 	static {
-		JavaPlugin viaversion = (JavaPlugin) Bukkit.getServer().getPluginManager().getPlugin("ViaVersion");
-		if (viaversion != null) {
-			if (ReflectionUtils.hasMethod(ViaVersionPlugin.class, "getApi")) {
-				hasViaVersion = true;
-				api = ((ViaVersionPlugin) viaversion).getApi();
-			} else
-				TuSKe.log("Couldn't hook with ViaVersion because it's outdated. Atleast version 1.0 is required.", Level.WARNING);
+		Plugin viaVersionPlugin = Bukkit.getServer().getPluginManager().getPlugin("ViaVersion");
+		if (viaVersionPlugin != null && viaVersionPlugin.isEnabled()) {
+			hasViaVersion = true;
+			api = ((ViaVersionPlugin) viaVersionPlugin).getApi();
 		}
 		if (hasViaVersion || hasProtocolSupport)
 			Registry.newProperty(ExprPlayerVersion.class, "(mc|minecraft) version", "player");
@@ -55,7 +48,7 @@ public class ExprPlayerVersion extends SimplePropertyExpression<Player, String>{
 	@Nullable
 	public String convert(Player p) {
 		if (hasViaVersion){
-			int i = ((BukkitViaAPI)api).getPlayerVersion(p);
+			int i = api.getPlayerVersion(p.getUniqueId());
 			return ProtocolVersion.getProtocol(i).getName().replace(".x", "");
 		} else if (hasProtocolSupport)
 			return protocolsupport.api.ProtocolSupportAPI.getProtocolVersion(p).getName();

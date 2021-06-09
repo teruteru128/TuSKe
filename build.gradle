@@ -2,7 +2,11 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
+java {
+    def targetJava = 8
+    targetCompatibility = JavaVersion.toVersion(targetJava)
+    sourceCompatibility = JavaVersion.toVersion(targetJava)
+}
 
 repositories {
     jcenter()
@@ -27,10 +31,10 @@ repositories {
         url 'https://mvn.yawk.at'
     }
     maven {
-        url 'http://ci.emc.gs/nexus/content/groups/aikar/'
+        url 'https://ci.emc.gs/nexus/content/groups/aikar/'
     }
     maven {
-        url 'http://maven.elmakers.com/repository/'
+        url 'https://maven.elmakers.com/repository/'
     }
     //PreicousStone
     maven {
@@ -41,18 +45,19 @@ configurations {
     compileWithJar
 }
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
     //This is the default bukkit version supported. It is just for javadocs and jar hierarchy
-    compile 'org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT'
     //Since it uses NMS/OBC stuffs, it's required to manually add the bukkit jars.
-    compile fileTree(dir: 'dependencies', include: '*.jar')
+    compileOnly fileTree(dir: 'dependencies', include: '*.jar')
     //Skript
-    compile 'ch.njol:skript:2.2-dev35b'
+    compileOnly 'ch.njol:skript:2.2-dev35b'
     //Generex API. Used to expressions to generate strings from regex
     compileWithJar files('dependencies/Generex.jar')
     //ViaVersion
-    compile 'us.myles:viaversion:1.1.1'
-    configurations.compile.extendsFrom(configurations.compileWithJar)
+    compileOnly 'com.viaversion:viaversion-api:4.0.0'
+    compileOnly 'com.viaversion:viaversion-bukkit:4.0.0'
+//    configurations.compileOnly.extendsFrom(configurations.compileWithJar)
 }
 
 //Used to copy the final jar in test server located in at same place
