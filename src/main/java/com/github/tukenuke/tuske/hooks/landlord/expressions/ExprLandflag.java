@@ -7,7 +7,7 @@ import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.LowOwnedLand;
 
-import javax.annotation.Nullable;
+
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.classes.Changer.ChangeMode;
@@ -47,12 +47,12 @@ public class ExprLandflag extends SimpleExpression<Boolean>{
 	}
 
 	@Override
-	public String toString(@Nullable Event e, boolean arg1) {
+	public String toString( Event e, boolean arg1) {
 		return "landflag " + this.lf + " of " +this.ol;
 	}
 
 	@Override
-	@Nullable
+
 	protected Boolean[] get(Event e) {
 		LowOwnedLand ol = this.ol.getSingle(e);
 		Landflag lf = this.lf.getSingle(e);
@@ -77,7 +77,7 @@ public class ExprLandflag extends SimpleExpression<Boolean>{
 			String[][] perms = ol.getLandPerms(false);
 			perms[isf][lf.getPermSlot()] = bo;
 			ol.setPermissions(ol.permsToString(perms));
-			Landlord.getInstance().getDatabase().save(ol);
+			//Landlord.getInstance().getDatabase().save(ol);
 		}
 		
 		
