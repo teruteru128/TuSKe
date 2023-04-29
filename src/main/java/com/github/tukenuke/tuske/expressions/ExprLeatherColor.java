@@ -23,7 +23,7 @@ import ch.njol.util.coll.CollectionUtils;
 
 public class ExprLeatherColor extends SimpleExpression<Integer>{
 	static {
-		Registry.newProperty(ExprLeatherColor.class, "[leather] (0¦red|1¦green|2¦blue) colo[u]r", "-itemstacks/colors");
+		Registry.newProperty(ExprLeatherColor.class, "[leather] (0\u00a6red|1\u00a6green|2\u00a6blue) colo[u]r", "-itemstacks/colors");
 	}
 
 	private Expression<?> i;

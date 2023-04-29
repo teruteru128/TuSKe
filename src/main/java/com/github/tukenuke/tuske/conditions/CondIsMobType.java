@@ -16,8 +16,8 @@ import ch.njol.util.Kleenean;
 public class CondIsMobType extends Condition{
 	static {
 		Registry.newCondition(CondIsMobType.class,
-				"%livingentities% (is|are) [a] (0¦hostile|1¦neutral|2¦passive) [mob]",
-				"%livingentities% (is|are)(n't| not) [a] (0¦hostile|1¦neutral|2¦passive) [mob]");
+				"%livingentities% (is|are) [a] (0\u00a6hostile|1\u00a6neutral|2\u00a6passive) [mob]",
+				"%livingentities% (is|are)(n't| not) [a] (0\u00a6hostile|1\u00a6neutral|2\u00a6passive) [mob]");
 	}
 
 	private Expression<LivingEntity> et;
